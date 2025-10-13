@@ -16,6 +16,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.todoapp.screens.LoginScreen
 import com.example.todoapp.screens.RegisterScreen
+import com.example.todoapp.screens.Splash
 import com.example.todoapp.screens.SplashScreen
 
 class MainActivity : ComponentActivity() {
@@ -43,10 +44,10 @@ class MainActivity : ComponentActivity() {
 fun MainNavigation(modifier : Modifier) {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "register") {
+    NavHost(navController = navController, startDestination = "splash") {
 
         composable(route = "splash") {
-            SplashScreen()
+            Splash(navController)
         }
         composable(route = "register") {
             RegisterScreen(modifier = Modifier) {

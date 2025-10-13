@@ -19,11 +19,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.todoapp.R
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier, onClickAble: () -> Unit) {
+fun LoginScreen(modifier: Modifier = Modifier, onClickAble: () -> Unit = {}) {
     // estados del formulario para mandarlos a la db
     var username by remember { mutableStateOf(value = "") }
     var password by remember { mutableStateOf(value = "") }
@@ -73,4 +74,11 @@ fun LoginScreen(modifier: Modifier = Modifier, onClickAble: () -> Unit) {
             Text(text = "Logueate")
         }
     }
+}
+
+
+@Preview(showSystemUi = true)
+@Composable
+fun LoginPreview(){
+    LoginScreen()
 }
