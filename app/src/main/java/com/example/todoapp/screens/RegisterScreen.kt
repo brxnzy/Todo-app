@@ -1,8 +1,10 @@
 package com.example.todoapp.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
@@ -16,33 +18,30 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.todoapp.R
 
+
+@Preview(showSystemUi = true)
 @Composable
-fun RegisterScreen(modifier : Modifier = Modifier, onClickAble: () -> Unit) {
+fun RegisterScreen(modifier : Modifier = Modifier, onClickAble: () -> Unit = {}) {
     // estados del formulario para mandarlos a la db
     var username by remember { mutableStateOf(value = "") }
     var email by remember { mutableStateOf(value = "") }
     var password by remember { mutableStateOf(value = "") }
 
-    // Imagen para representar el logo
-    Image(
-        painter = painterResource(id = R.drawable.ic_launcher_background),
-        contentDescription = null,
-        contentScale = ContentScale.Crop,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(height = 300.dp)
-    )
+
+
 
     // formulario del register simple (email, username, password)
     Column(
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier) {
+        modifier = Modifier.fillMaxSize()) {
 
         Text(text = "Registrate",
             style = MaterialTheme.typography.titleLarge,
@@ -82,3 +81,8 @@ fun RegisterScreen(modifier : Modifier = Modifier, onClickAble: () -> Unit) {
 
     }
 }
+
+
+
+
+
