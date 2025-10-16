@@ -1,32 +1,36 @@
 package com.example.todoapp.ui.theme
 
+
 import androidx.compose.material3.Typography
-import androidx.compose.ui.text.TextStyle
+
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.example.todoapp.R
 
-// Set of Material typography styles to start with
+
+val inter = FontFamily(
+    Font(R.font.inter_regular, FontWeight.Normal),
+    Font(R.font.inter_medium, FontWeight.Medium),
+    Font(R.font.inter_semibold, FontWeight.SemiBold),
+    Font(R.font.inter_bold, FontWeight.Bold)
+)
+
 val Typography = Typography(
-    bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
-    ),
-    titleLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 24.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
-    ),
-    labelSmall = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
-    )
+    displayLarge = Typography().displayLarge.copy(fontFamily = inter),
+    displayMedium = Typography().displayMedium.copy(fontFamily = inter),
+    displaySmall = Typography().displaySmall.copy(fontFamily = inter),
+    headlineLarge = Typography().headlineLarge.copy(fontFamily = inter),
+    headlineMedium = Typography().headlineMedium.copy(fontFamily = inter),
+    headlineSmall = Typography().headlineSmall.copy(fontFamily = inter),
+    titleLarge = Typography().titleLarge.copy(fontFamily = inter),
+    titleMedium = Typography().titleMedium.copy(fontFamily = inter),
+    titleSmall = Typography().titleSmall.copy(fontFamily = inter),
+    bodyLarge = Typography().bodyLarge.copy(fontFamily = inter),
+    bodyMedium = Typography().bodyMedium.copy(fontFamily = inter),
+    bodySmall = Typography().bodySmall.copy(fontFamily = inter),
+    labelLarge = Typography().labelLarge.copy(fontFamily = inter),
+    labelMedium = Typography().labelMedium.copy(fontFamily = inter),
+    labelSmall = Typography().labelSmall.copy(fontFamily = inter),
 )

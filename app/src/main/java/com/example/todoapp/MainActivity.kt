@@ -10,14 +10,15 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 import com.example.todoapp.ui.theme.TodoAppTheme
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.todoapp.screens.LoginScreen
 import com.example.todoapp.screens.RegisterScreen
 import com.example.todoapp.screens.Splash
-import com.example.todoapp.screens.SplashScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,15 +26,25 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TodoAppTheme {
+                val navController = rememberNavController()
+                val currentRoute =
+                    navController.currentBackStackEntryAsState().value?.destination?.route
+
+
                 Scaffold(
-                    bottomBar = {
-                        BottomAppBar {
-                            // comming soon bottomAppBar
-                        }
-                    },
+                    bottomBar =
+                        {
+                            if (currentRoute !in listOf("splash", "register", "login")) {
+
+
+                                BottomAppBar {
+
+                                }
+                            }
+                        },
                     modifier = Modifier.fillMaxSize()
                 ) { innerPadding ->
-                    MainNavigation(modifier = Modifier.padding(innerPadding))
+                    MainNavigation(navController, modifier = Modifier.padding(innerPadding))
                 }
             }
         }
@@ -41,8 +52,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainNavigation(modifier : Modifier) {
-    val navController = rememberNavController()
+fun MainNavigation(navController: NavHostController, modifier: Modifier) {
 
     NavHost(navController = navController, startDestination = "splash") {
 
@@ -53,6 +63,7 @@ fun MainNavigation(modifier : Modifier) {
             RegisterScreen(modifier = Modifier) {
                 /* lambda de la funcion onCLickAble
                 para manejar el boton del register */
+                navController.navigate("login")
             }
         }
 

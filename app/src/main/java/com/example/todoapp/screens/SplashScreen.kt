@@ -23,7 +23,7 @@ import kotlinx.coroutines.delay
 
 
 @Composable
-fun Splash(navController: NavHostController){
+fun Splash(navController: NavHostController) {
     LaunchedEffect(key1 = true) {
         delay(2000)
         navController.popBackStack()
