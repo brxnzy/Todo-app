@@ -10,12 +10,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,24 +30,27 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.todoapp.ui.theme.TodoAppTheme
 
 
 @Composable
-fun RegisterScreen(modifier: Modifier = Modifier, onClickAble: () -> Unit = {}) {
+fun RegisterScreen(
+    modifier: Modifier = Modifier,
+    onClickAble: () -> Unit = {},
+    onClickLogin: () -> Unit = {}
+) {
 
     var username by remember { mutableStateOf(value = "") }
     var password by remember { mutableStateOf(value = "") }
-    var error by remember { mutableStateOf(false) }
-
-
-
-
+    var passwordVisible by remember { mutableStateOf(value = false) }
+    var error by remember { mutableStateOf(value = false) }
 
     TodoAppTheme {
-
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
@@ -54,33 +61,55 @@ fun RegisterScreen(modifier: Modifier = Modifier, onClickAble: () -> Unit = {}) 
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Crea una cuenta",
+                    text = "Crear una cuenta",
                     style = MaterialTheme.typography.bodyMedium,
-                    fontSize = 32.sp,
+                    fontSize = 36.sp,
                     fontWeight = FontWeight.Medium
                 )
 
-                OutlinedTextField(
+                TextField(
                     value = username,
                     onValueChange = { username = it },
                     label = { Text(text = "Usuario") },
-                    modifier = Modifier.fillMaxWidth(0.7f),
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Person,
+                            contentDescription = null
+                        )
+                    },
+                    modifier = Modifier.fillMaxWidth(fraction = 0.7f),
                     isError = error,
-                    colors = OutlinedTextFieldDefaults.colors(
-                        errorLabelColor =  Color.Red
-
+                    colors = TextFieldDefaults.colors(
+                        errorLabelColor = Color.Red,
+                        focusedContainerColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
                     )
                 )
 
-                OutlinedTextField(
+                TextField(
                     value = password,
                     onValueChange = { password = it },
                     label = { Text(text = "Contraseña") },
-                    modifier = Modifier.fillMaxWidth(0.7f),
+                    modifier = Modifier.fillMaxWidth(fraction = 0.7f),
                     isError = error,
-
-                    colors = OutlinedTextFieldDefaults.colors(
-                        errorLabelColor =  Color.Red
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Lock,
+                            contentDescription = null
+                        )
+                    },
+                    trailingIcon = {
+                        TextButton(onClick = { passwordVisible = !passwordVisible }) {
+                            Text(text = if (passwordVisible) "Ocultar" else "Mostrar")
+                        }
+                    },
+                    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    colors = TextFieldDefaults.colors(
+                        errorLabelColor = Color.Red,
+                        focusedContainerColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
                     )
                 )
 
@@ -92,7 +121,7 @@ fun RegisterScreen(modifier: Modifier = Modifier, onClickAble: () -> Unit = {}) 
                             error = true
                         }
                     },
-                    shape = RoundedCornerShape(8.dp),
+                    shape = RoundedCornerShape(size = 8.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.primary
                     )
@@ -120,14 +149,17 @@ fun RegisterScreen(modifier: Modifier = Modifier, onClickAble: () -> Unit = {}) 
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Medium,
                 modifier = Modifier
-                    .clickable { onClickAble() }
+                    .clickable {
+                        onClickLogin()
+                    }
             )
-
         }
     }
 }
 
-
-
-
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Composable
+fun RegisterPreview() {
+    RegisterScreen()
+}
 
