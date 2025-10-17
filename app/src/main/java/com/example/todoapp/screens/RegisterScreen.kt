@@ -44,7 +44,6 @@ fun RegisterScreen(
     onClickAble: () -> Unit = {},
     onClickLogin: () -> Unit = {}
 ) {
-
     var username by remember { mutableStateOf(value = "") }
     var password by remember { mutableStateOf(value = "") }
     var passwordVisible by remember { mutableStateOf(value = false) }
@@ -70,7 +69,9 @@ fun RegisterScreen(
                 TextField(
                     value = username,
                     onValueChange = { username = it },
-                    label = { Text(text = "Usuario") },
+                    label = {
+                        Text(text = "Usuario")
+                    },
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Default.Person,
@@ -90,7 +91,9 @@ fun RegisterScreen(
                 TextField(
                     value = password,
                     onValueChange = { password = it },
-                    label = { Text(text = "Contraseña") },
+                    label = {
+                        Text(text = "Contraseña")
+                    },
                     modifier = Modifier.fillMaxWidth(fraction = 0.7f),
                     isError = error,
                     leadingIcon = {
@@ -129,19 +132,20 @@ fun RegisterScreen(
                     Text(
                         text = "Registrarse",
                         fontSize = 17.sp,
-                        modifier = Modifier.padding(5.dp)
+                        modifier = Modifier.padding(all = 5.dp)
                     )
                 }
             }
             if (error) {
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(height = 8.dp))
                 Text(
-                    "Llena todos los campos",
-                    color = Color.Red
+                    text = "Llena todos los campos",
+                    color = Color.Red,
+                    fontSize = 16.sp
                 )
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(height = 12.dp))
 
             Text(
                 text = "Ya tienes una cuenta?",
@@ -157,7 +161,7 @@ fun RegisterScreen(
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, showSystemUi = true)
 @Composable
 fun RegisterPreview() {
     RegisterScreen()
