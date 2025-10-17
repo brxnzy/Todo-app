@@ -11,7 +11,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.example.todoapp.ui.theme.TodoAppTheme
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -19,6 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.todoapp.screens.LoginScreen
 import com.example.todoapp.screens.RegisterScreen
 import com.example.todoapp.screens.Splash
+import com.example.todoapp.ui.theme.TodoAppTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,14 +29,10 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val currentRoute =
                     navController.currentBackStackEntryAsState().value?.destination?.route
-
-
                 Scaffold(
                     bottomBar =
                         {
                             if (currentRoute !in listOf("splash", "register", "login")) {
-
-
                                 BottomAppBar {
 
                                 }
@@ -59,19 +55,21 @@ fun MainNavigation(navController: NavHostController, modifier: Modifier) {
         composable(route = "splash") {
             Splash(navController)
         }
+
         composable(route = "register") {
-            RegisterScreen(modifier = Modifier) {
-                /* lambda de la funcion onCLickAble
-                para manejar el boton del register */
-                navController.navigate("login")
-            }
+            RegisterScreen(modifier = Modifier, onClickAble = {
+                navController.navigate(route = "login")
+            }, onClickLogin = {
+                navController.navigate(route = "login")
+            })
         }
 
         composable(route = "login") {
-            LoginScreen(modifier = Modifier) {
-                /* lambda de la funcion onCLickAble
-                para manejar el boton del login */
-            }
+            LoginScreen(modifier = Modifier, onClickAble = {
+                navController.navigate(route = "home")
+            }, onClickRegister = {
+                navController.navigate(route = "register")
+            })
         }
 
     }
