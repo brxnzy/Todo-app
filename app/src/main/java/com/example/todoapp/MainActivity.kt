@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.todoapp.screens.HomeScreen
 import com.example.todoapp.screens.LoginScreen
 import com.example.todoapp.screens.RegisterScreen
 import com.example.todoapp.screens.Splash
@@ -27,20 +28,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             TodoAppTheme {
                 val navController = rememberNavController()
-                val currentRoute =
-                    navController.currentBackStackEntryAsState().value?.destination?.route
-                Scaffold(
-                    bottomBar =
-                        {
-                            if (currentRoute !in listOf("splash", "register", "login")) {
-                                BottomAppBar {
-
-                                }
-                            }
-                        },
-                    modifier = Modifier.fillMaxSize()
-                ) { innerPadding ->
-                    MainNavigation(navController, modifier = Modifier.padding(innerPadding))
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    MainNavigation(
+                        navController,
+                        modifier = Modifier.padding(paddingValues = innerPadding)
+                    )
                 }
             }
         }
@@ -70,6 +62,12 @@ fun MainNavigation(navController: NavHostController, modifier: Modifier) {
             }, onClickRegister = {
                 navController.navigate(route = "register")
             })
+        }
+
+        composable(route = "home") {
+            HomeScreen(modifier = Modifier, fabOnClick = {
+                navController.navigate(route = "createNote")
+            }, navController = navController)
         }
 
     }
