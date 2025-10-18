@@ -1,29 +1,43 @@
 package com.example.todoapp.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import kotlinx.coroutines.launch
 
 sealed class HomeTab(
     val title: String,
@@ -40,13 +54,19 @@ sealed class HomeTab(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    modifier: Modifier = Modifier,
-    fabOnClick: () -> Unit = {}
+    modifier: Modifier = Modifier
 ) {
     var selectedTab by remember { mutableStateOf<HomeTab>(value = HomeTab.Home) }
     val tabs = listOf(HomeTab.Home, HomeTab.Profile)
+
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
+    val scope = rememberCoroutineScope()
+    var showSheet by remember { mutableStateOf(value = false) }
 
     Scaffold(
         bottomBar = {
@@ -68,6 +88,11 @@ fun HomeScreen(
                 }
             }
         },
+        floatingActionButton = {
+            FloatingActionButton(onClick = { showSheet = true }) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = null)
+            }
+        },
         modifier = Modifier.fillMaxSize()
     ) { paddingValues ->
         Box(
@@ -79,6 +104,21 @@ fun HomeScreen(
             when (selectedTab) {
                 is HomeTab.Home -> Text(text = "Home")
                 is HomeTab.Profile -> Text(text = "Profile")
+            }
+        }
+    }
+
+    if (showSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showSheet = false },
+            sheetState = sheetState,
+            dragHandle = { BottomSheetDefaults.DragHandle() }
+        ) {
+            CreateNoteScreen {
+                scope.launch {
+                    sheetState.hide()
+                }
+                    .invokeOnCompletion { showSheet = false }
             }
         }
     }

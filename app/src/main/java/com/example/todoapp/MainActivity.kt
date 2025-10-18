@@ -20,7 +20,6 @@ import com.example.todoapp.screens.LoginScreen
 import com.example.todoapp.screens.RegisterScreen
 import com.example.todoapp.screens.Splash
 import com.example.todoapp.ui.theme.TodoTheme
-import io.github.jan.supabase.auth.Auth
 
 
 class MainActivity : ComponentActivity() {
@@ -74,9 +73,7 @@ fun MainNavigation(
         }
 
         composable(route = "home") {
-            HomeScreen(modifier = Modifier, fabOnClick = {
-                navController.navigate(route = "createNote")
-            })
+            HomeScreen(modifier = Modifier)
         }
 
     }
