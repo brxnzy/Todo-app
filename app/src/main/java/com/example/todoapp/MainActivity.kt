@@ -8,16 +8,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.todoapp.data.supabase
 import com.example.todoapp.screens.HomeScreen
 import com.example.todoapp.screens.LoginScreen
 import com.example.todoapp.screens.RegisterScreen
 import com.example.todoapp.screens.Splash
 import com.example.todoapp.ui.theme.TodoTheme
+import io.github.jan.supabase.auth.Auth
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +51,8 @@ fun MainNavigation(navController: NavHostController, modifier: Modifier) {
         }
 
         composable(route = "register") {
-            RegisterScreen(modifier = Modifier, onClickAble = {
+            val viewModel = remember { AuthViewModel(supabase) }
+            RegisterScreen(viewModel= viewModel,modifier = Modifier, onClickAble = {
                 navController.navigate(route = "login")
             }, onClickLogin = {
                 navController.navigate(route = "login")
