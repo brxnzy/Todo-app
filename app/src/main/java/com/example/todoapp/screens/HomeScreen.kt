@@ -19,10 +19,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.todoapp.AuthViewModel
 
 
 @Composable
 fun HomeScreen(
+    viewModel: AuthViewModel,
     modifier: Modifier = Modifier,
     navController: NavHostController,
     fabOnClick: () -> Unit = {}

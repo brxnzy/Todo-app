@@ -3,6 +3,7 @@ package com.example.todoapp
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.todoapp.models.Profile
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
@@ -41,12 +42,10 @@ class AuthViewModel(private val supabase: SupabaseClient): ViewModel() {
                 Log.d("AuthViewModel", "User: ${result}")
 
 
-
                 _authState.value = AuthState.Success
                 _currentUser.value = Profile(
                     id = result?.id ?: "",
-                    email = email,
-                    username = username
+                    name = username
                 )
             } catch (e: Exception) {
                 _authState.value = AuthState.Error(e.message ?: "Error desconocido")
@@ -54,6 +53,51 @@ class AuthViewModel(private val supabase: SupabaseClient): ViewModel() {
             }
         }
     }
+
+
+    fun signIn(email: String, password: String){
+        viewModelScope.launch {
+            try{
+
+            _authState.value = AuthState.Loading
+
+            val result = supabase.auth.signInWith(Email){
+                this.email = email
+                this.password = password
+            }
+
+            val user = supabase.auth.currentUserOrNull()
+            if(user !=null){
+                val profile = supabase.from("profiles").select(columns =Columns.list("id","name")){
+                   filter {
+                       eq("id", user.id)
+                   }
+
+                }
+                    .decodeSingle<Profile>()
+                _currentUser.value = profile
+                _authState.value = AuthState.Success
+            }
+
+            }catch (e: Exception){
+                _authState.value = AuthState.Error(e.message?: "Error desconocido")
+            }
+
+        }
+    }
+
+    fun signOut() {
+        viewModelScope.launch {
+            try {
+                supabase.auth.signOut()
+                _currentUser.value = null
+                _authState.value = AuthState.Idle
+            } catch (e: Exception) {
+                Log.e("AuthViewModel", "Error en logout: ${e.message}")
+            }
+        }
+    }
+
     private suspend fun loadUserProfile(userId: String) {
         try {
             val profile = supabase.from("profiles")

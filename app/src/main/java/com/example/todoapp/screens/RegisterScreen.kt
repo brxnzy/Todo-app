@@ -112,6 +112,7 @@ fun RegisterScreen(
                     },
                     modifier = Modifier.fillMaxWidth(fraction = 0.7f),
                     isError = error,
+                    singleLine = true,
                     colors = TextFieldDefaults.colors(
                         errorLabelColor = Color.Red,
                         focusedContainerColor = Color.Transparent,
@@ -127,6 +128,7 @@ fun RegisterScreen(
                     },
                     modifier = Modifier.fillMaxWidth(fraction = 0.7f),
                     isError = error,
+                    singleLine = true,
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Default.Lock,
