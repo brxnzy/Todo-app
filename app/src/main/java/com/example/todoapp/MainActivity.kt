@@ -10,7 +10,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -22,6 +21,7 @@ import com.example.todoapp.screens.RegisterScreen
 import com.example.todoapp.screens.Splash
 import com.example.todoapp.ui.theme.TodoTheme
 import io.github.jan.supabase.auth.Auth
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +44,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainNavigation(authviewModel: AuthViewModel,navController: NavHostController, modifier: Modifier) {
+fun MainNavigation(
+    authviewModel: AuthViewModel,
+    navController: NavHostController,
+    modifier: Modifier
+) {
 
     NavHost(navController = navController, startDestination = "splash") {
 
@@ -54,7 +58,7 @@ fun MainNavigation(authviewModel: AuthViewModel,navController: NavHostController
 
         composable(route = "register") {
 
-            RegisterScreen(viewModel= authviewModel,modifier = Modifier, onClickAble = {
+            RegisterScreen(viewModel = authviewModel, modifier = Modifier, onClickAble = {
                 navController.navigate(route = "login")
             }, onClickLogin = {
                 navController.navigate(route = "login")
@@ -62,7 +66,7 @@ fun MainNavigation(authviewModel: AuthViewModel,navController: NavHostController
         }
 
         composable(route = "login") {
-            LoginScreen(authviewModel,modifier = Modifier, onClickAble = {
+            LoginScreen(authviewModel, modifier = Modifier, onClickAble = {
                 navController.navigate(route = "home")
             }, onClickRegister = {
                 navController.navigate(route = "register")
@@ -70,9 +74,9 @@ fun MainNavigation(authviewModel: AuthViewModel,navController: NavHostController
         }
 
         composable(route = "home") {
-            HomeScreen(authviewModel,modifier = Modifier, fabOnClick = {
+            HomeScreen(modifier = Modifier, fabOnClick = {
                 navController.navigate(route = "createNote")
-            }, navController = navController)
+            })
         }
 
     }
