@@ -42,7 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.todoapp.AuthState
 import com.example.todoapp.AuthViewModel
-import com.example.todoapp.ui.theme.TodoAppTheme
+import com.example.todoapp.ui.theme.TodoTheme
 
 
 @Composable
@@ -59,7 +59,7 @@ fun RegisterScreen(
     var passwordVisible by remember { mutableStateOf(value = false) }
     var error by remember { mutableStateOf(value = false) }
 
-    TodoAppTheme {
+    TodoTheme {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,

@@ -19,14 +19,16 @@ import com.example.todoapp.screens.HomeScreen
 import com.example.todoapp.screens.LoginScreen
 import com.example.todoapp.screens.RegisterScreen
 import com.example.todoapp.screens.Splash
-import com.example.todoapp.ui.theme.TodoAppTheme
+import com.example.todoapp.ui.theme.TodoTheme
+import io.github.jan.supabase.auth.Auth
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            TodoAppTheme {
+            TodoTheme {
                 val navController = rememberNavController()
                 val authviewModel = remember { AuthViewModel(supabase) }
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
