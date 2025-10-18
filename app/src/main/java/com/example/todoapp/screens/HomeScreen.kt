@@ -1,9 +1,12 @@
 package com.example.todoapp.screens
 
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
@@ -24,6 +27,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.todoapp.AuthViewModel
+import com.example.todoapp.TaskViewModel
+import com.example.todoapp.data.supabase
 
 sealed class HomeTab(
     val title: String,
@@ -47,6 +53,7 @@ fun HomeScreen(
 ) {
     var selectedTab by remember { mutableStateOf<HomeTab>(value = HomeTab.Home) }
     val tabs = listOf(HomeTab.Home, HomeTab.Profile)
+    val taskViewModel = remember { TaskViewModel(supabase) }
 
     Scaffold(
         bottomBar = {
@@ -77,7 +84,7 @@ fun HomeScreen(
             contentAlignment = Alignment.Center
         ) {
             when (selectedTab) {
-                is HomeTab.Home -> Text(text = "Home")
+                is HomeTab.Home -> TaskScreen(taskViewModel)
                 is HomeTab.Profile -> Text(text = "Profile")
             }
         }
