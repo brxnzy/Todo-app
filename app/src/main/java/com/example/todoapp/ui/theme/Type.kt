@@ -80,5 +80,6 @@ val extendedTypography = AppTypography(
 
 )
 
+
 // te estoy cargando la fuente tuya de una mejor forma
 // quita estos comentarios
