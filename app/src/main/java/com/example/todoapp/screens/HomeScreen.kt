@@ -71,7 +71,7 @@ fun HomeScreen(
     Scaffold(
         bottomBar = {
             BottomAppBar(
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+                contentPadding = PaddingValues(horizontal = 17.dp, vertical = 9.dp)
             ) {
                 tabs.forEach { tab ->
                     NavigationBarItem(
