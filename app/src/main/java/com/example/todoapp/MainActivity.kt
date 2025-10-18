@@ -70,7 +70,7 @@ fun MainNavigation(authviewModel: AuthViewModel,navController: NavHostController
         }
 
         composable(route = "home") {
-            HomeScreen(authViewModel,modifier = Modifier, fabOnClick = {
+            HomeScreen(authviewModel,modifier = Modifier, fabOnClick = {
                 navController.navigate(route = "createNote")
             }, navController = navController)
         }
