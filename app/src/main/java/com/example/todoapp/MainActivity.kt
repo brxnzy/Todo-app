@@ -30,8 +30,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             TodoTheme {
                 val navController = rememberNavController()
+                val authviewModel = remember { AuthViewModel(supabase) }
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     MainNavigation(
+                        authviewModel,
                         navController,
                         modifier = Modifier.padding(paddingValues = innerPadding)
                     )
@@ -42,7 +44,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainNavigation(navController: NavHostController, modifier: Modifier) {
+fun MainNavigation(authviewModel: AuthViewModel,navController: NavHostController, modifier: Modifier) {
 
     NavHost(navController = navController, startDestination = "splash") {
 
@@ -51,8 +53,8 @@ fun MainNavigation(navController: NavHostController, modifier: Modifier) {
         }
 
         composable(route = "register") {
-            val viewModel = remember { AuthViewModel(supabase) }
-            RegisterScreen(viewModel= viewModel,modifier = Modifier, onClickAble = {
+
+            RegisterScreen(viewModel= authviewModel,modifier = Modifier, onClickAble = {
                 navController.navigate(route = "login")
             }, onClickLogin = {
                 navController.navigate(route = "login")
@@ -60,7 +62,7 @@ fun MainNavigation(navController: NavHostController, modifier: Modifier) {
         }
 
         composable(route = "login") {
-            LoginScreen(modifier = Modifier, onClickAble = {
+            LoginScreen(authviewModel,modifier = Modifier, onClickAble = {
                 navController.navigate(route = "home")
             }, onClickRegister = {
                 navController.navigate(route = "register")
@@ -68,7 +70,7 @@ fun MainNavigation(navController: NavHostController, modifier: Modifier) {
         }
 
         composable(route = "home") {
-            HomeScreen(modifier = Modifier, fabOnClick = {
+            HomeScreen(authViewModel,modifier = Modifier, fabOnClick = {
                 navController.navigate(route = "createNote")
             }, navController = navController)
         }
