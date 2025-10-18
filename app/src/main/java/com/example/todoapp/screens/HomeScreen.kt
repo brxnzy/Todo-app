@@ -1,5 +1,4 @@
 package com.example.todoapp.screens
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -36,8 +35,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+
+import com.example.todoapp.TaskViewModel
+import com.example.todoapp.data.supabase
+
 import androidx.compose.ui.window.Dialog
 import kotlinx.coroutines.launch
+
 
 sealed class HomeTab(
     val title: String,
@@ -61,6 +65,7 @@ fun HomeScreen(
 ) {
     var selectedTab by remember { mutableStateOf<HomeTab>(value = HomeTab.Home) }
     val tabs = listOf(HomeTab.Home, HomeTab.Profile)
+    val taskViewModel = remember { TaskViewModel(supabase) }
 
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
@@ -102,7 +107,7 @@ fun HomeScreen(
             contentAlignment = Alignment.Center
         ) {
             when (selectedTab) {
-                is HomeTab.Home -> Text(text = "Home")
+                is HomeTab.Home -> TaskScreen(taskViewModel)
                 is HomeTab.Profile -> Text(text = "Profile")
             }
         }

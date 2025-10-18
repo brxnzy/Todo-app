@@ -1,5 +1,4 @@
 package com.example.todoapp.data
-
 import com.example.todoapp.BuildConfig
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.createSupabaseClient
