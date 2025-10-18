@@ -125,6 +125,7 @@ fun LoginScreen(
             ) {
                 Text(
                     text = "Logueate",
+                    color = Color.White,
                     fontSize = 17.sp,
                     modifier = Modifier.padding(all = 5.dp)
                 )
