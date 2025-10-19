@@ -1,4 +1,5 @@
 package com.example.todoapp.screens
+
 import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,16 +21,13 @@ import com.example.todoapp.models.Task
 fun TaskScreen(viewModel: TaskViewModel) {
     val tasks by viewModel.myTasks.collectAsState()
 
-
     LaunchedEffect(Unit) {
         Log.d("TAREAS", "LaunchedEffect - Llamando getTasks()")
         viewModel.getTasks()
     }
 
     LazyColumn {
-        items(
-            count = tasks.size
-        ) { index ->
+        items(count = tasks.size) { index ->
             Log.d("TAREAS", "Renderizando tarea $index: ${tasks[index].title}")
             TaskItem(task = tasks[index])
         }
