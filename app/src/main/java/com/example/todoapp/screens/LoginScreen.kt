@@ -38,11 +38,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.todoapp.AuthState
 import com.example.todoapp.AuthViewModel
+import com.example.todoapp.data.SessionManager
 
 
 @Composable
 fun LoginScreen(
     viewModel: AuthViewModel,
+    sessionManager: SessionManager,
     modifier: Modifier = Modifier,
     onClickAble: () -> Unit = {},
     onClickRegister: () -> Unit = {}
@@ -124,7 +126,7 @@ fun LoginScreen(
             Button(
                 onClick = {
                     if (email.isNotEmpty() && password.isNotEmpty()) {
-                        viewModel.signIn(email, password)
+                        viewModel.signIn(email, password,sessionManager)
 
                     } else {
                         error = true

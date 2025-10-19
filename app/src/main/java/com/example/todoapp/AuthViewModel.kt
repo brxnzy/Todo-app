@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.todoapp.data.SessionManager
 import com.example.todoapp.models.Profile
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
@@ -25,7 +26,7 @@ class AuthViewModel(private val supabase: SupabaseClient): ViewModel() {
     private val _currentUser = MutableStateFlow<Profile?>(null)
     val currentUser: StateFlow<Profile?> = _currentUser.asStateFlow()
 
-    fun signUp(email: String, password: String, username: String) {
+    fun signUp(email: String, password: String, username: String, sessionManager: SessionManager) {
         viewModelScope.launch {
             try {
                 _authState.value = AuthState.Loading
@@ -38,14 +39,23 @@ class AuthViewModel(private val supabase: SupabaseClient): ViewModel() {
                     }
                 }
                 Log.d("AuthViewModel", "=== Supabase signUp Result ===")
-                Log.d("AuthViewModel", "User: ${result}")
+                Log.d("AuthViewModel", "User: $result")
 
+                // Obtener la sesión actual después del registro
+                val session = supabase.auth.currentSessionOrNull()
+                if (session != null) {
+                    sessionManager.saveSession(
+                        accessToken = session.accessToken,
+                        refreshToken = session.refreshToken
+                    )
+                }
 
                 _authState.value = AuthState.Success
                 _currentUser.value = Profile(
                     id = result?.id ?: "",
                     name = username
                 )
+
             } catch (e: Exception) {
                 _authState.value = AuthState.Error(e.message ?: "Error desconocido")
                 Log.e("AuthViewModel", "=== Exception en signUp ===", e)
@@ -54,36 +64,45 @@ class AuthViewModel(private val supabase: SupabaseClient): ViewModel() {
     }
 
 
-    fun signIn(email: String, password: String){
+
+    fun signIn(email: String, password: String, sessionManager: SessionManager) {
         viewModelScope.launch {
-            try{
+            try {
+                _authState.value = AuthState.Loading
 
-            _authState.value = AuthState.Loading
-
-            val result = supabase.auth.signInWith(Email){
-                this.email = email
-                this.password = password
-            }
-
-            val user = supabase.auth.currentUserOrNull()
-            if(user !=null){
-                val profile = supabase.from("profiles").select(columns =Columns.list("id","name")){
-                   filter {
-                       eq("id", user.id)
-                   }
-
+                val result = supabase.auth.signInWith(Email) {
+                    this.email = email
+                    this.password = password
                 }
-                    .decodeSingle<Profile>()
-                _currentUser.value = profile
-                _authState.value = AuthState.Success
-            }
 
-            }catch (e: Exception){
-                _authState.value = AuthState.Error(e.message?: "Error desconocido")
-            }
+                val user = supabase.auth.currentUserOrNull()
+                if (user != null) {
+                    // Guardar sesión en DataStore
+                    val session = supabase.auth.currentSessionOrNull()
+                    if (session != null) {
+                        sessionManager.saveSession(
+                            accessToken = session.accessToken,
+                            refreshToken = session.refreshToken
+                        )
+                    }
 
+                    // Traer profile
+                    val profile = supabase.from("profiles")
+                        .select(columns = Columns.list("id", "name")) {
+                            filter { eq("id", user.id) }
+                        }
+                        .decodeSingle<Profile>()
+
+                    _currentUser.value = profile
+                    _authState.value = AuthState.Success
+                }
+
+            } catch (e: Exception) {
+                _authState.value = AuthState.Error(e.message ?: "Error desconocido")
+            }
         }
     }
+
 
     fun signOut() {
         viewModelScope.launch {
@@ -97,22 +116,7 @@ class AuthViewModel(private val supabase: SupabaseClient): ViewModel() {
         }
     }
 
-    private suspend fun loadUserProfile(userId: String) {
-        try {
-            val profile = supabase.from("profiles")
-                .select(columns = Columns.list("id, username, email"))
-                {
-                    filter {
-                        eq("id", userId)
-                    }
-                }
-                .decodeSingle<Profile>()
 
-            _currentUser.value = profile
-        } catch (e: Exception) {
-            _authState.value = AuthState.Error("Error al cargar perfil")
-        }
-    }
 
 
 

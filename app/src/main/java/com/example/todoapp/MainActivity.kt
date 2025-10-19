@@ -14,6 +14,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.todoapp.data.SessionManager
 import com.example.todoapp.data.supabase
 import com.example.todoapp.screens.HomeScreen
 import com.example.todoapp.screens.LoginScreen
@@ -28,13 +29,16 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TodoTheme {
+                val sessionManager = remember { SessionManager(applicationContext) }
                 val navController = rememberNavController()
                 val authviewModel = remember { AuthViewModel(supabase) }
+
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     MainNavigation(
                         authviewModel,
                         navController,
-                        modifier = Modifier.padding(paddingValues = innerPadding)
+                        modifier = Modifier.padding(paddingValues = innerPadding),
+                        sessionManager
                     )
                 }
             }
@@ -46,18 +50,20 @@ class MainActivity : ComponentActivity() {
 fun MainNavigation(
     authviewModel: AuthViewModel,
     navController: NavHostController,
-    modifier: Modifier
+    modifier: Modifier,
+    sessionManager: SessionManager
 ) {
 
     NavHost(navController = navController, startDestination = "splash") {
 
         composable(route = "splash") {
-            Splash(navController)
+
+            Splash(navController, sessionManager = sessionManager)
         }
 
         composable(route = "register") {
 
-            RegisterScreen(viewModel = authviewModel, modifier = Modifier, onClickAble = {
+            RegisterScreen(viewModel = authviewModel,sessionManager = sessionManager, modifier = Modifier, onClickAble = {
                 navController.navigate(route = "login")
             }, onClickLogin = {
                 navController.navigate(route = "login")
@@ -65,7 +71,7 @@ fun MainNavigation(
         }
 
         composable(route = "login") {
-            LoginScreen(authviewModel, modifier = Modifier, onClickAble = {
+            LoginScreen(authviewModel,sessionManager = sessionManager, modifier = Modifier, onClickAble = {
                 navController.navigate(route = "home")
             }, onClickRegister = {
                 navController.navigate(route = "register")

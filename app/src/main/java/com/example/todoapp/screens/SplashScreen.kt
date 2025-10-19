@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
@@ -20,14 +21,21 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.todoapp.R
 import kotlinx.coroutines.delay
+import androidx.compose.runtime.getValue
+import com.example.todoapp.data.SessionManager
 
 
 @Composable
-fun Splash(navController: NavHostController) {
-    LaunchedEffect(key1 = true) {
+fun Splash(navController: NavHostController, sessionManager: SessionManager) {
+    val session by sessionManager.sessionFlow.collectAsState(initial = null)
+    LaunchedEffect(session) {
         delay(2000)
         navController.popBackStack()
-        navController.navigate("login")
+        if (session != null) {
+            navController.navigate("home")
+        } else {
+            navController.navigate("login")
+        }
     }
 
     SplashScreen()
