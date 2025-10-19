@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,6 +25,8 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
@@ -136,8 +139,8 @@ fun HomeScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.8f)
-                    .padding(24.dp)
+                    .fillMaxHeight(fraction = 0.9f)
+                    .padding(all = 24.dp)
             ) {
                 CreateNoteScreen {
                     scope.launch {
@@ -151,12 +154,54 @@ fun HomeScreen(
 }
 
 @Composable
+fun PriorityChips() {
+    var priority by remember { mutableStateOf(value = "Normal") }
+
+    val options = listOf("Importante", "Normal", "Casual")
+
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(space = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(all = 16.dp)
+    ) {
+        Text(
+            text = "Prioridad:", style = TextStyle(
+                fontSize = 16.sp,
+            )
+        )
+        options.forEach { option ->
+            val selectedColor = when (option) {
+                "Importante" -> Color(color = 0xFFE53935)
+                "Normal" -> Color(color = 0xFFFFC107)
+                "Casual" -> Color(color = 0xFF4CAF50)
+                else -> Color.Gray
+            }
+
+            val chipColors = FilterChipDefaults.filterChipColors(
+                selectedContainerColor = selectedColor,
+                selectedLabelColor = Color.White,
+                containerColor = Color.LightGray.copy(alpha = 0.3f),
+                labelColor = Color.DarkGray
+            )
+
+            FilterChip(
+                selected = priority == option,
+                onClick = { priority = option },
+                label = { Text(text = option) },
+                colors = chipColors
+            )
+
+        }
+    }
+}
+
+@Composable
 fun CreateNoteScreen(onClose: () -> Unit = {}) {
     var title by remember { mutableStateOf(value = "") }
     var description by remember { mutableStateOf(value = "") }
 
     var pressed by remember { mutableStateOf(value = false) }
-    val scale by animateFloatAsState(if (pressed) 0.95f else 1f)
+    val scale by animateFloatAsState(targetValue = if (pressed) 0.95f else 1f)
 
     Column(
         modifier = Modifier
@@ -205,8 +250,6 @@ fun CreateNoteScreen(onClose: () -> Unit = {}) {
             )
         )
 
-        Spacer(modifier = Modifier.height(height = 10.dp))
-
         TextField(
             value = description,
             onValueChange = {
@@ -231,7 +274,7 @@ fun CreateNoteScreen(onClose: () -> Unit = {}) {
             )
         )
 
-        Spacer(modifier = Modifier.height(height = 10.dp))
+        PriorityChips()
 
         TextButton(
             onClick = { /* TODO() not yet implemented */ },
@@ -241,7 +284,6 @@ fun CreateNoteScreen(onClose: () -> Unit = {}) {
             modifier = Modifier
                 .scale(scale)
                 .padding(all = 4.dp),
-            contentPadding = PaddingValues(12.dp)
         ) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(space = 4.dp),
