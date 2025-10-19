@@ -26,11 +26,8 @@ class TaskViewModel(private val supabase: SupabaseClient): ViewModel(){
         Log.d("TAREAS", "getTasks() llamado")
         viewModelScope.launch {
             try {
-                Log.d("TAREAS", "Dentro del viewModelScope")
-
                 val currentUser = supabase.auth.currentUserOrNull()
                 Log.d("TAREAS", "Usuario actual: ${currentUser?.id}")
-
                 if (currentUser == null) {
                     Log.e("TAREAS", "❌ NO HAY USUARIO LOGUEADO")
                     return@launch

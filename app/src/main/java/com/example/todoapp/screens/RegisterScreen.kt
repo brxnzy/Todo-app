@@ -42,12 +42,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.todoapp.AuthState
 import com.example.todoapp.AuthViewModel
+import com.example.todoapp.data.SessionManager
 import com.example.todoapp.ui.theme.TodoTheme
 
 
 @Composable
 fun RegisterScreen(
     viewModel: AuthViewModel,
+    sessionManager: SessionManager,
     modifier: Modifier = Modifier,
     onClickAble: () -> Unit = {},
     onClickLogin: () -> Unit = {}
@@ -151,7 +153,7 @@ fun RegisterScreen(
                 Button(
                     onClick = {
                         if (username.isNotEmpty() && password.isNotEmpty() && email.isNotEmpty()) {
-                            viewModel.signUp(email, password, username)
+                            viewModel.signUp(email, password, username,sessionManager)
 //                            onClickAble()
                         } else {
                             error = true
